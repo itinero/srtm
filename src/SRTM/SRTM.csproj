@@ -9,6 +9,17 @@
 
   <PropertyGroup>
     <DefineConstants>LIBLOG_PORTABLE</DefineConstants>
+    <Version>0.0.1</Version>
+    <Authors>Ben Abelshausen</Authors>
+    <Company>Itinero</Company>
+    <Description>A library to read SRTM data, loads missing files on-the-fly.</Description>
+    <Copyright>Ben Abelshausen</Copyright>
+    <PackageLicenseUrl>https://github.com/itinero/srtm/blob/master/LICENSE.md</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/itinero/srtm</PackageProjectUrl>
+    <PackageIconUrl>https://github.com/itinero/srtm/raw/master/icon.png</PackageIconUrl>
+    <RepositoryUrl>https://github.com/itinero/srtm</RepositoryUrl>
+    <RepositoryType>Git</RepositoryType>
+    <PackageTags>srtm, gis</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>

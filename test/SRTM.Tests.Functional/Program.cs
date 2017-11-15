@@ -21,7 +21,6 @@
 // THE SOFTWARE.
 
 using Serilog;
-using SRTM.Logging;
 using System;
 
 namespace SRTM.Tests.Functional
