@@ -20,6 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using SRTM.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -35,6 +36,7 @@ namespace SRTM
     /// </exception>
     public class SRTMData : ISRTMData
     {
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Alpinechough.Srtm.SrtmData"/> class.
         /// </summary>
@@ -61,7 +63,7 @@ namespace SRTM
         /// <summary>
         /// Gets or sets the missing cell delegate.
         /// </summary>
-        public GetMissingCellDelegate GetMissingCell { get; set; }
+        public GetMissingCellDelegate GetMissingCell { get; set; } = Sources.USGS.USGSSource.GetMissingCell;
         
         /// <summary>
         /// Gets or sets the data directory.
@@ -129,6 +131,12 @@ namespace SRTM
 
             var filePath = Path.Combine(DataDirectory, filename + ".hgt");
             var zipFilePath = Path.Combine(DataDirectory, filename + ".hgt.zip");
+
+            if (!File.Exists(filePath) && !File.Exists(zipFilePath) &&
+                this.GetMissingCell != null)
+            {
+                this.GetMissingCell(DataDirectory, filename);
+            }
             
             if (File.Exists(filePath))
             {

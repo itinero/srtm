@@ -1,16 +1,19 @@
 ﻿using SRTM.Logging;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
-using System.Text;
 
 namespace SRTM.Sources
 {
-    public static class SourceHelpers
+    public class SourceHelpers
     {
-        public static bool Download(string local, string remote)
+        /// <summary>
+        /// Donwloads a remote file and stores the data in the local one.
+        /// </summary>
+        public static bool Download(string local, string remote, bool logErrors = false)
         {
+            var Logger = LogProvider.For<SourceHelpers>();
+
             try
             {
                 if (File.Exists(local))
@@ -24,10 +27,14 @@ namespace SRTM.Sources
                 {
                     stream.CopyTo(outputStream);
                 }
+                return true;
             }
             catch (Exception ex)
             {
-                LogProvider.CurrentLogProvider.GetLogger()
+                if (logErrors)
+                {
+                    Logger.ErrorException("Download failed.", ex);
+                }
             }
             return false;
         }

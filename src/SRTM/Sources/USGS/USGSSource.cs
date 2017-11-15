@@ -20,19 +20,51 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using SRTM.Logging;
+
 namespace SRTM.Sources.USGS
 {
     /// <summary>
     /// Defines an USGS source of data.
     /// </summary>
-    public static class USGSSource
+    public class USGSSource
     {
         /// <summary>
-        /// The source of 
+        /// The source of the data.
         /// </summary>
         public const string SOURCE = @"https://dds.cr.usgs.gov/srtm/version2_1/SRTM3/";
 
+        /// <summary>
+        /// The continents to try.
+        /// </summary>
+        public static string[] CONTINENTS = new string[]
+        {
+            "Africa",
+            "Australia",
+            "Eurasia",
+            "Islands",
+            "North_America",
+            "South_America"
+        };
 
-
+        /// <summary>
+        /// Gets the missing cell.
+        /// </summary>
+        public static bool GetMissingCell(string path, string name)
+        {
+            var filename = name + ".hgt.zip";
+            var local = System.IO.Path.Combine(path, filename);
+            
+            var Logger = LogProvider.For<SRTMData>();
+            Logger.Info("Downloading {0} ...", name);
+            foreach (var continent in CONTINENTS)
+            {
+                if (SourceHelpers.Download(local, SOURCE + continent + "/" + filename))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

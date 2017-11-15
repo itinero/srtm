@@ -43,5 +43,7 @@ TestResult*.xml
 *.shp
 *.dbf
 *.shx
+*.shx
+*.hgt.zip
 
 islands_*.geojson

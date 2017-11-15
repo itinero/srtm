@@ -20,6 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using Serilog;
+using SRTM.Logging;
 using System;
 
 namespace SRTM.Tests.Functional
@@ -28,6 +30,11 @@ namespace SRTM.Tests.Functional
     {
         static void Main(string[] args)
         {
+            var log = new LoggerConfiguration()
+                .WriteTo.ColoredConsole(outputTemplate: "{Timestamp:HH:mm} [{Level}] ({Name:l}) {Message}{NewLine}{Exception}")
+                .CreateLogger();
+            Log.Logger = log;
+
             // https://dds.cr.usgs.gov/srtm/version2_1/SRTM3/
             var srtmData = new SRTMData(@"C:\work\itinero\projects\elevation\srtm\srtm\data");
 
@@ -36,6 +43,15 @@ namespace SRTM.Tests.Functional
 
             int? elevationLaPaz = srtmData.GetElevation(-16.5, -68.15);
             Console.WriteLine("Elevation of La Paz: {0}m", elevationLaPaz);
+
+            int? elevationKathmandu = srtmData.GetElevation(27.702983735525862f, 85.2978515625f);
+            Console.WriteLine("Elevation of Kathmandu {0}m", elevationLaPaz);
+
+            int? elevationHanoi = srtmData.GetElevation(21.030673628606102f, 105.853271484375f);
+            Console.WriteLine("Elevation of Ha Noi {0}m", elevationHanoi);
+
+            Console.WriteLine("Testing finished.");
+            Console.ReadLine();
         }
     }
 }

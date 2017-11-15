@@ -55,9 +55,9 @@ namespace SRTM.Logging
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
 #if LIBLOG_PROVIDERS_ONLY
-    using YourRootNamespace.LibLog.LogProviders;
+    using SRTM.LibLog.LogProviders;
 #else
-    using YourRootNamespace.Logging.LogProviders;
+    using SRTM.Logging.LogProviders;
 #endif
     using System;
 #if !LIBLOG_PROVIDERS_ONLY
@@ -866,7 +866,7 @@ namespace SRTM.Logging
 #if LIBLOG_PROVIDERS_ONLY
 namespace YourRootNamespace.LibLog.LogProviders
 #else
-namespace YourRootNamespace.Logging.LogProviders
+namespace SRTM.Logging.LogProviders
 #endif
 {
     using System;
