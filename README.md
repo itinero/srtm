@@ -1,5 +1,12 @@
 # SRTM
 
+[![Build status](http://build.itinero.tech:8080/app/rest/builds/buildType:(id:Itinero_Srtm)/statusIcon)](https://build.itinero.tech/viewType.html?buildTypeId=Itinero_Srtm)
+[![Join the chat at https://gitter.im/Itinero/Lobby](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Itinero/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Visit our website](https://img.shields.io/badge/website-itinero.tech-020031.svg) ](http://www.itinero.tech/)
+[![](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/itinero/srtm/blob/master/LICENSE.md)
+
+- SRTM: [![NuGet Badge](https://buildstats.info/nuget/SRTM)](https://www.nuget.org/packages/SRTM/)
+
 A simple library to load SRTM data and return heights in _meter_ for a given lat/lon.
 
 ## Usage
