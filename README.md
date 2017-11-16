@@ -7,7 +7,7 @@
 
 - SRTM: [![NuGet Badge](https://buildstats.info/nuget/SRTM)](https://www.nuget.org/packages/SRTM/)
 
-A simple library to load SRTM data and return heights in _meter_ for a given lat/lon.
+A simple library to load SRTM data and return heights in _meter_ for a given lat/lon. Based on https://github.com/alpinechough/Alpinechough.Srtm
 
 ## Usage
 
