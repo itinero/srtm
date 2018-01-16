@@ -36,6 +36,7 @@ namespace SRTM
     /// </exception>
     public class SRTMData : ISRTMData
     {
+        private const int RETRIES = 3;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Alpinechough.Srtm.SrtmData"/> class.
@@ -52,7 +53,7 @@ namespace SRTM
                 throw new DirectoryNotFoundException(dataDirectory);
 
             DataDirectory = dataDirectory;
-            DataCells = new List<SRTMDataCell>();
+            DataCells = new List<ISRTMDataCell>();
         }
 
         /// <summary>
@@ -79,7 +80,7 @@ namespace SRTM
         /// <value>
         /// The SRTM data cells.
         /// </value>
-        private List<SRTMDataCell> DataCells { get; set; }
+        private List<ISRTMDataCell> DataCells { get; set; }
         
         #region Public methods
 
@@ -131,11 +132,29 @@ namespace SRTM
 
             var filePath = Path.Combine(DataDirectory, filename + ".hgt");
             var zipFilePath = Path.Combine(DataDirectory, filename + ".hgt.zip");
+            var txtFilePath = Path.Combine(DataDirectory, filename + ".txt");
+            var count = -1;
 
-            if (!File.Exists(filePath) && !File.Exists(zipFilePath) &&
+            if (!File.Exists(filePath) && !File.Exists(zipFilePath) && !File.Exists(txtFilePath) &&
                 this.GetMissingCell != null)
             {
                 this.GetMissingCell(DataDirectory, filename);
+            }
+            else if(File.Exists(txtFilePath) && this.GetMissingCell != null)
+            {
+                var txtFile = File.ReadAllText(txtFilePath);
+                if (!int.TryParse(txtFile, out count))
+                {
+                    File.Delete(txtFilePath);
+                    count = -1;
+                }
+                else if(count < RETRIES)
+                {
+                    if (this.GetMissingCell(DataDirectory, filename))
+                    {
+                        File.Delete(txtFilePath);
+                    }
+                }
             }
             
             if (File.Exists(filePath))
@@ -148,7 +167,21 @@ namespace SRTM
             }
             else
             {
-                throw new Exception("SRTM data cell not found: " + filename);
+                if (count < 0)
+                {
+                    File.WriteAllText(txtFilePath, "1");
+                    return null;
+                }
+                else if (count < RETRIES)
+                {
+                    count++;
+                    File.WriteAllText(txtFilePath, count.ToString());
+                    return null;
+                }
+                else
+                {
+                    dataCell = new EmptySRTMDataCell(txtFilePath);
+                }
             }
             
             // add to cells.

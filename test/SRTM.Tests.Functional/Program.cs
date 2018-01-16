@@ -49,6 +49,10 @@ namespace SRTM.Tests.Functional
             int? elevationHanoi = srtmData.GetElevation(21.030673628606102f, 105.853271484375f);
             Console.WriteLine("Elevation of Ha Noi {0}m", elevationHanoi);
 
+            // tries to get elevation from an empty cell.
+            int? elevationSomeplace1 = srtmData.GetElevation(52.02237f, 2.55853224f);
+            Console.WriteLine("Elevation of nowhere returns {0}", elevationSomeplace1);
+
             Console.WriteLine("Testing finished.");
             Console.ReadLine();
         }

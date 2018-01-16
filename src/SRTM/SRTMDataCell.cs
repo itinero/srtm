@@ -38,7 +38,7 @@ namespace SRTM
     /// Is thrown when an argument passed to a method is invalid because it is outside the allowable range of values as
     /// specified by the method.
     /// </exception>
-    public class SRTMDataCell
+    public class SRTMDataCell : ISRTMDataCell
     {
         #region Lifecycle
 
