@@ -7,7 +7,8 @@
 
 - SRTM: [![NuGet Badge](https://buildstats.info/nuget/SRTM)](https://www.nuget.org/packages/SRTM/)
 
-A simple library to load SRTM data and return heights in _meter_ for a given lat/lon.
+A simple library to load SRTM data and return heights in _meter_ for a given lat/lon. Based on [Alpinechough.Srtm
+](https://github.com/alpinechough/Alpinechough.Srtm).
 
 ## Usage
 
@@ -29,3 +30,12 @@ Console.WriteLine("Elevation of Kathmandu {0}m", elevation);
 elevation = srtmData.GetElevation(21.030673628606102f, 105.853271484375f);
 Console.WriteLine("Elevation of Ha Noi {0}m", elevation);
 ```
+
+## Data sources
+
+We implemented one default source of data, the [USGS SRTM](https://dds.cr.usgs.gov/srtm/version2_1/SRTM3/). If you want to add an extra source, we're accepting pull requests, you just need to implement [something like this](https://github.com/itinero/srtm/blob/master/src/SRTM/Sources/USGS/USGSSource.cs).
+
+## We need help!
+
+If you think we need to add another source of data **let us know via the issues**, if you know more about SRTM or of another source of elevation, also **let us know**.
+
