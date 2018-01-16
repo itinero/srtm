@@ -166,6 +166,9 @@ namespace SRTM
             if (bytesPos < 0 || bytesPos > PointsPerCell * PointsPerCell * 2)
                 throw new ArgumentOutOfRangeException("Coordinates out of range.", "coordinates");
 
+            if (bytesPos >= HgtData.Length)
+                return null;
+
             if ((HgtData[bytesPos] == 0x80) && (HgtData[bytesPos + 1] == 0x00))
                 return null;
 
