@@ -110,14 +110,20 @@ namespace SRTM
             if (latitude < 0)
             {
                 cellLatitude *= -1;
-                cellLatitude -= 1; // because negative so in bottom tile
+                if (cellLatitude != latitude)
+                { // if exactly equal, keep the current tile.
+                    cellLatitude -= 1; // because negative so in bottom tile
+                }
             }
 
             int cellLongitude = (int)Math.Floor(Math.Abs(longitude));
             if (longitude < 0)
             {
                 cellLongitude *= -1;
-                cellLongitude -= 1; // because negative so in left tile
+                if (cellLongitude != longitude)
+                { // if exactly equal, keep the current tile.
+                    cellLongitude -= 1; // because negative so in left tile
+                }
             }
 
             var dataCell = DataCells.Where(dc => dc.Latitude == cellLatitude && dc.Longitude == cellLongitude).FirstOrDefault();

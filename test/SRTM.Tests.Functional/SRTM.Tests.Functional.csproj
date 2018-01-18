@@ -13,4 +13,8 @@
     <ProjectReference Include="..\..\src\SRTM\SRTM.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="srtm-cache\" />
+  </ItemGroup>
+
 </Project>

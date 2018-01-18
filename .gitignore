@@ -45,5 +45,7 @@ TestResult*.xml
 *.shx
 *.shx
 *.hgt.zip
+srtm-cache*/
+
 
 islands_*.geojson

@@ -35,7 +35,7 @@ namespace SRTM.Tests.Functional
             Log.Logger = log;
 
             // https://dds.cr.usgs.gov/srtm/version2_1/SRTM3/
-            var srtmData = new SRTMData(@"C:\work\itinero\projects\elevation\srtm\srtm\data");
+            var srtmData = new SRTMData(@"srtm-cache");
 
             int? elevationInnsbruck = srtmData.GetElevation(47.267222, 11.392778);
             Console.WriteLine("Elevation of Innsbruck: {0}m", elevationInnsbruck);
@@ -52,6 +52,9 @@ namespace SRTM.Tests.Functional
             // tries to get elevation from an empty cell.
             int? elevationSomeplace1 = srtmData.GetElevation(52.02237f, 2.55853224f);
             Console.WriteLine("Elevation of nowhere returns {0}", elevationSomeplace1);
+
+            int? elevationNamibia1 = srtmData.GetElevation(-20, 19.89597);
+            Console.WriteLine("Elevation of namibia1 returns {0}", elevationNamibia1);
 
             Console.WriteLine("Testing finished.");
             Console.ReadLine();
