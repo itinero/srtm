@@ -1,6 +1,9 @@
-﻿// The MIT License (MIT)
+﻿using System.Net;
+using SRTM.Logging;
 
-// Copyright (c) 2017 Alpine Chough Software, Ben Abelshausen
+// The MIT License (MIT)
+
+// Copyright (c) 2019, Tadas Juščius
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,51 +23,37 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using SRTM.Logging;
-
-namespace SRTM.Sources.USGS
+namespace SRTM.Sources.NASA
 {
     /// <summary>
-    /// Defines an USGS source of data.
+    /// Defines a NASA source of data.
     /// </summary>
-    public class USGSSource : ISRTMSource
+    public class NASASource : ISRTMSource
     {
+        private NetworkCredential _credentials;
+
+        public NASASource(NetworkCredential credentials)
+        {
+            _credentials = credentials;
+        }
+        
         /// <summary>
         /// The source of the data.
         /// </summary>
-        public const string SOURCE = @"https://dds.cr.usgs.gov/srtm/version2_1/SRTM3/";
-
-        /// <summary>
-        /// The continents to try.
-        /// </summary>
-        public static string[] CONTINENTS = new string[]
-        {
-            "Africa",
-            "Australia",
-            "Eurasia",
-            "Islands",
-            "North_America",
-            "South_America"
-        };
+        public const string SOURCE = @"https://e4ftl01.cr.usgs.gov/MEASURES/SRTMGL1.003/2000.02.11/";
 
         /// <summary>
         /// Gets the missing cell.
         /// </summary>
         public bool GetMissingCell(string path, string name)
         {
-            var filename = name + ".hgt.zip";
-            var local = System.IO.Path.Combine(path, filename);
+            var filename = name + ".SRTMGL1.hgt.zip";
+            var local = System.IO.Path.Combine(path, name + ".hgt.zip");
             
             var Logger = LogProvider.For<SRTMData>();
             Logger.Info("Downloading {0} ...", name);
-            foreach (var continent in CONTINENTS)
-            {
-                if (SourceHelpers.Download(local, SOURCE + continent + "/" + filename))
-                {
-                    return true;
-                }
-            }
-            return false;
+
+            return SourceHelpers.DownloadWithCredentials(_credentials, local, SOURCE + filename);
         }
     }
 }

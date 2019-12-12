@@ -14,8 +14,12 @@ A simple library to load SRTM data and return heights in _meter_ for a given lat
 
 ```csharp
 // create a new srtm data instance.
-// it accepts a folder to download and cache data into.
-var srtmData = new SRTMData(@"/path/to/data/cache");
+// it accepts a folder to download and cache data into in addition to the source you want to use for the data.
+// USGS data is immediately available, but is of a lower resolution.
+var srtmData = new SRTMData(@"/path/to/data/cache", new USGSSource());
+// NASA data is of a higher resolution, but requires creating an account at https://urs.earthdata.nasa.gov/users/new/.
+var credentials = new NetworkCredential("username", "password");
+var srtmData = new SRTMData(@"/path/to/data/cache", new NASASource(credentials));
 
 // get elevations for some locations
 int? elevation = srtmData.GetElevation(47.267222, 11.392778);
@@ -33,7 +37,7 @@ Console.WriteLine("Elevation of Ha Noi {0}m", elevation);
 
 ## Data sources
 
-We implemented one default source of data, the [USGS SRTM](https://dds.cr.usgs.gov/srtm/version2_1/SRTM3/). If you want to add an extra source, we're accepting pull requests, you just need to implement [something like this](https://github.com/itinero/srtm/blob/master/src/SRTM/Sources/USGS/USGSSource.cs).
+We implemented two sources of data, the [USGS SRTM](https://dds.cr.usgs.gov/srtm/version2_1/SRTM3/) and [NASA SRTM](https://e4ftl01.cr.usgs.gov/MEASURES/SRTMGL1.003/). If you want to add an extra source, we're accepting pull requests, you just need to implement [something like this](https://github.com/itinero/srtm/blob/master/src/SRTM/Sources/USGS/USGSSource.cs).
 
 ## We need help!
 

@@ -37,6 +37,7 @@ namespace SRTM
     public class SRTMData : ISRTMData
     {
         private const int RETRIES = 3;
+        private ISRTMSource _source;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Alpinechough.Srtm.SrtmData"/> class.
@@ -47,11 +48,13 @@ namespace SRTM
         /// <exception cref='DirectoryNotFoundException'>
         /// Is thrown when part of a file or directory argument cannot be found.
         /// </exception>
-        public SRTMData(string dataDirectory)
+        public SRTMData(string dataDirectory, ISRTMSource source)
         {
             if (!Directory.Exists(dataDirectory))
                 throw new DirectoryNotFoundException(dataDirectory);
 
+            _source = source;
+            GetMissingCell = _source.GetMissingCell;
             DataDirectory = dataDirectory;
             DataCells = new List<ISRTMDataCell>();
         }
@@ -64,7 +67,7 @@ namespace SRTM
         /// <summary>
         /// Gets or sets the missing cell delegate.
         /// </summary>
-        public GetMissingCellDelegate GetMissingCell { get; set; } = Sources.USGS.USGSSource.GetMissingCell;
+        public GetMissingCellDelegate GetMissingCell { get; set; }
         
         /// <summary>
         /// Gets or sets the data directory.
