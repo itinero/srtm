@@ -22,6 +22,7 @@
 
 using Serilog;
 using System;
+using SRTM.Sources.USGS;
 
 namespace SRTM.Tests.Functional
 {
@@ -35,7 +36,7 @@ namespace SRTM.Tests.Functional
             Log.Logger = log;
 
             // https://dds.cr.usgs.gov/srtm/version2_1/SRTM3/
-            var srtmData = new SRTMData(@"srtm-cache");
+            var srtmData = new SRTMData(@"srtm-cache", new USGSSource());
 
             int? elevationInnsbruck = srtmData.GetElevation(47.267222, 11.392778);
             Console.WriteLine("Elevation of Innsbruck: {0}m", elevationInnsbruck);

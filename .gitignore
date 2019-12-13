@@ -32,6 +32,9 @@ test-results*/
 *.patch
 TestResults*/
 
+#Intellij cache
+.idea/
+
 packages/*
 !packages/repositories.config
 .vs/*
