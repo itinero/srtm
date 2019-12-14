@@ -40,9 +40,22 @@ namespace SRTM
         /// </returns>
         /// <param name='latitude'></param>
         /// <param name='longitude'></param>
-        /// <exception cref='Exception'>
+        /// <exception cref='System.Exception'>
         /// Represents errors that occur during application execution.
         /// </exception>
         int? GetElevation(double latitude, double longitude);
+        
+        /// <summary>
+        /// Gets the elevation. Data is smoothed using bilinear interpolation.
+        /// </summary>
+        /// <returns>
+        /// The height. Null, if elevation is not available.
+        /// </returns>
+        /// <param name="latitude"></param>
+        /// <param name="longitude"></param>
+        /// <exception cref='System.Exception'>
+        /// Represents errors that occur during application execution.
+        /// </exception>
+        double? GetElevationBilinear(double latitude, double longitude);
     }
 }

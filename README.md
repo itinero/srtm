@@ -33,6 +33,19 @@ Console.WriteLine("Elevation of Kathmandu {0}m", elevation);
 
 elevation = srtmData.GetElevation(21.030673628606102f, 105.853271484375f);
 Console.WriteLine("Elevation of Ha Noi {0}m", elevation);
+
+// if a smoother result is preferred, it is possible to use bilinear interpolation at the cost of some accuracy
+double? smoothElevation = srtmData.GetElevationBilinear(47.267222, 11.392778);
+Console.WriteLine("Elevation of Innsbruck: {0}m", elevation);
+
+smoothElevation = srtmData.GetElevationBilinear(-16.5, -68.15);
+Console.WriteLine("Elevation of La Paz: {0}m", elevation);
+
+smoothElevation = srtmData.GetElevationBilinear(27.702983735525862f, 85.2978515625f);
+Console.WriteLine("Elevation of Kathmandu {0}m", elevation);
+
+smoothElevation = srtmData.GetElevationBilinear(21.030673628606102f, 105.853271484375f);
+Console.WriteLine("Elevation of Ha Noi {0}m", elevation);
 ```
 
 ## Data sources
