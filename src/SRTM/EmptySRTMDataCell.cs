@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace SRTM
 {
@@ -34,6 +32,11 @@ namespace SRTM
         public int Longitude { get; private set; }
 
         public int? GetElevation(double latitude, double longitude)
+        {
+            return null;
+        }
+
+        public double? GetElevationBilinear(double latitude, double longitude)
         {
             return null;
         }

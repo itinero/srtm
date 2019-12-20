@@ -20,7 +20,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using SRTM.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -40,10 +39,13 @@ namespace SRTM
         private ISRTMSource _source;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Alpinechough.Srtm.SrtmData"/> class.
+        /// Initializes a new instance of the <see cref="SRTM.SRTMData"/> class.
         /// </summary>
         /// <param name='dataDirectory'>
         /// Data directory.
+        /// </param>
+        /// <param name="source">
+        /// Data source to use. Must be an instance of the <see cref="SRTM.ISRTMSource"/> class
         /// </param>
         /// <exception cref='DirectoryNotFoundException'>
         /// Is thrown when part of a file or directory argument cannot be found.
@@ -101,13 +103,53 @@ namespace SRTM
         /// <returns>
         /// The height. Null, if elevation is not available.
         /// </returns>
-        /// <param name='coordinates'>
-        /// Coordinates.
+        /// <param name='latitude'>
+        /// Latitude in decimal degrees of desired location.
+        /// </param>
+        /// <param name="longitude">
+        /// Longitude in decimal degrees of desired location
         /// </param>
         /// <exception cref='Exception'>
         /// Represents errors that occur during application execution.
         /// </exception>
         public int? GetElevation(double latitude, double longitude)
+        {
+            ISRTMDataCell dataCell = GetDataCell(latitude, longitude);
+            return dataCell.GetElevation(latitude, longitude);
+        }
+
+        /// <summary>
+        /// Gets the elevation. Data is smoothed using bilinear interpolation.
+        /// </summary>
+        /// <returns>
+        /// The height. Null, if elevation is not available.
+        /// </returns>
+        /// <param name='latitude'>
+        /// Latitude in decimal degrees of desired location.
+        /// </param>
+        /// <param name="longitude">
+        /// Longitude in decimal degrees of desired location
+        /// </param>
+        /// <exception cref='Exception'>
+        /// Represents errors that occur during application execution.
+        /// </exception>
+        public double? GetElevationBilinear(double latitude, double longitude)
+        {
+            ISRTMDataCell dataCell = GetDataCell(latitude, longitude);
+            return dataCell.GetElevationBilinear(latitude, longitude);
+        }
+
+        #endregion
+        
+        #region Private methods
+
+        /// <summary>
+        /// Method responsible for identifying the correct data cell and either retrieving it from cache ir downloading it from source.
+        /// </summary>
+        /// <param name="latitude"></param>
+        /// <param name="longitude"></param>
+        /// <returns>Elevation data cell. Must be an instance of the <see cref="SRTM.ISRTMDataCell"/> class.</returns>
+        private ISRTMDataCell GetDataCell(double latitude, double longitude)
         {
             int cellLatitude = (int)Math.Floor(Math.Abs(latitude));
             if (latitude < 0)
@@ -131,7 +173,9 @@ namespace SRTM
 
             var dataCell = DataCells.Where(dc => dc.Latitude == cellLatitude && dc.Longitude == cellLongitude).FirstOrDefault();
             if (dataCell != null)
-                return dataCell.GetElevation(latitude, longitude);
+            {
+                return dataCell;
+            }
 
             string filename = string.Format("{0}{1:D2}{2}{3:D3}",
                 cellLatitude < 0 ? "S" : "N",
@@ -179,27 +223,24 @@ namespace SRTM
                 if (count < 0)
                 {
                     File.WriteAllText(txtFilePath, "1");
-                    return null;
+                    return GetDataCell(latitude, longitude);
                 }
                 else if (count < RETRIES)
                 {
                     count++;
                     File.WriteAllText(txtFilePath, count.ToString());
-                    return null;
+                    return GetDataCell(latitude, longitude);
                 }
                 else
                 {
                     dataCell = new EmptySRTMDataCell(txtFilePath);
                 }
             }
-            
-            // add to cells.
             DataCells.Add(dataCell);
 
-            // return requested elevation.
-            return dataCell.GetElevation(latitude, longitude);
+            return dataCell;
         }
-
+        
         #endregion
     }
 }

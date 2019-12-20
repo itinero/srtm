@@ -43,7 +43,7 @@ namespace SRTM
         #region Lifecycle
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Alpinechough.Srtm.SrtmDataCell"/> class.
+        /// Initializes a new instance of the <see cref="SRTM.SRTMDataCell"/> class.
         /// </summary>
         /// <param name='filepath'>
         /// Filepath.
@@ -161,6 +161,61 @@ namespace SRTM
         {
             int localLat = (int)((latitude - Latitude) * PointsPerCell);
             int localLon = (int)(((longitude - Longitude)) * PointsPerCell);
+            return ReadByteData(localLat, localLon);
+        }
+        
+        /// <summary>
+        /// Gets the elevation. Data is smoothed using bilinear interpolation.
+        /// </summary>
+        /// <returns>
+        /// The height. Null, if elevation is not available.
+        /// </returns>
+        /// <param name='latitude'></param>
+        /// <param name='longitude'></param>
+        /// <exception cref='Exception'>
+        /// Represents errors that occur during application execution.
+        /// </exception>
+        public double? GetElevationBilinear(double latitude, double longitude)
+        {
+            double localLat = (latitude - Latitude) * PointsPerCell;
+            double localLon = (longitude - Longitude) * PointsPerCell;
+
+            int localLatMin = (int) Math.Floor(localLat);
+            int localLonMin = (int) Math.Floor(localLon);
+            int localLatMax = (int) Math.Ceiling(localLat);
+            int localLonMax = (int) Math.Ceiling(localLon);
+
+            int? elevation00 = ReadByteData(localLatMin, localLonMin);
+            int? elevation10 = ReadByteData(localLatMax, localLonMin);
+            int? elevation01 = ReadByteData(localLatMin, localLonMax);
+            int? elevation11 = ReadByteData(localLatMax, localLonMax);
+
+            if (!elevation00.HasValue || !elevation10.HasValue || !elevation01.HasValue || !elevation11.HasValue)
+            {
+                //Can't do bilinear if missing one of the points. Default to regular.
+                return (double)GetElevation(latitude, longitude);
+            }
+            
+            double deltaLat = localLatMax - localLat;
+            double deltaLon = localLonMax - localLon;
+
+            return Blerp((double) elevation00, (double) elevation10, (double) elevation01, (double) elevation11,
+                deltaLat, deltaLon);
+        }
+
+        #endregion
+        
+        #region Private Methods
+
+        /// <summary>
+        /// Method responsible for reading byte data from data cell file.
+        /// </summary>
+        /// <param name="localLat">Local latitude within the data cell</param>
+        /// <param name="localLon">Local longitude within the data cell</param>
+        /// <returns>Height read from data cell file</returns>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        private int? ReadByteData(int localLat, int localLon)
+        {
             int bytesPos = ((PointsPerCell - localLat - 1) * PointsPerCell * 2) + localLon * 2;
 
             if (bytesPos < 0 || bytesPos > PointsPerCell * PointsPerCell * 2)
@@ -176,6 +231,16 @@ namespace SRTM
             return (HgtData[bytesPos]) << 8 | HgtData[bytesPos + 1];
         }
 
+        private double Lerp(double start, double end, double delta)
+        {
+            return start + (end - start) * delta;
+        }
+
+        private double Blerp(double val00, double val10, double val01, double val11, double deltaX, double deltaY)
+        {
+            return Lerp(Lerp(val11, val01, deltaX), Lerp(val10, val00, deltaX), deltaY);
+        }
+        
         #endregion
     }
 }
