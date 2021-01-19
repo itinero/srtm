@@ -21,3 +21,9 @@ jobs:
       run: dotnet restore
     - name: Build all projects.
       run: dotnet build --configuration Release --no-restore
+    - name: Nuget Pack
+      run: dotnet pack -c release
+      working-directory: ./src/SRTM/
+    - name: Nuget push
+      run: dotnet nuget push **/*.nupkg --skip-duplicate -k ${{ secrets.GITHUB_TOKEN }} -s https://nuget.pkg.github.com/itiner/index.json
+      working-directory: ./src/
