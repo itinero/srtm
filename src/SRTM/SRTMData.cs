@@ -24,6 +24,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using SRTM.Sources;
 
 namespace SRTM
 {
@@ -59,6 +60,24 @@ namespace SRTM
             GetMissingCell = _source.GetMissingCell;
             DataDirectory = dataDirectory;
             DataCells = new List<ISRTMDataCell>();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SRTM.SRTMData"/> class.
+        /// </summary>
+        /// <param name='dataDirectory'>
+        /// Data directory.
+        /// </param>
+        /// <param name="getMissingCell">
+        /// Gets a missing cell and writes it to the given path.
+        /// </param>
+        /// <exception cref='DirectoryNotFoundException'>
+        /// Is thrown when part of a file or directory argument cannot be found.
+        /// </exception>
+        public SRTMData(string dataDirectory, Func<(string path, string name), bool> getMissingCell)
+            : this(dataDirectory, new FuncSource(getMissingCell))
+        {
+            
         }
 
         /// <summary>

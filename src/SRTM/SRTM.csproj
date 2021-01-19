@@ -2,9 +2,10 @@
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <TargetFramework>netstandard1.6</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <ApplicationIcon />
     <StartupObject />
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup>
