@@ -1,0 +1,29 @@
+name: release to nuget
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build-and-test:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: 'true'
+    - name: Setup .NET Core 5.
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.101
+    - name: Restore packages.
+      run: dotnet restore
+    - name: Build all projects.
+      run: dotnet build --configuration Release --no-restore
+    - name: Nuget Pack
+      run: dotnet pack -c release
+      working-directory: ./src/SRTM/
+    - name: Nuget push
+      run: dotnet nuget push **/*.nupkg --skip-duplicate -k ${{ secrets.NUGET_TOKEN }} -s https://api.nuget.org/v3/index.json
+      working-directory: ./src/SRTM/
