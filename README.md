@@ -1,6 +1,6 @@
 # SRTM
 
-[![Build status](http://build.itinero.tech:8080/app/rest/builds/buildType:(id:Itinero_Srtm)/statusIcon)](https://build.itinero.tech/viewType.html?buildTypeId=Itinero_Srtm)
+[![build](https://github.com/itinero/srtm/actions/workflows/build.yml/badge.svg)](https://github.com/itinero/srtm/actions/workflows/build.yml)
 [![Join the chat at https://gitter.im/Itinero/Lobby](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Itinero/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Visit our website](https://img.shields.io/badge/website-itinero.tech-020031.svg) ](http://www.itinero.tech/)
 [![](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/itinero/srtm/blob/master/LICENSE.md)
