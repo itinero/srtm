@@ -37,20 +37,21 @@ namespace SRTM.Tests.Functional
           .CreateLogger();
       Log.Logger = log;
 
-      USGSTest();
-      //BilinearInterpolationTest();
+      NASATest();
+      //BilinearInterpolationTest(); //USGS is broken
 
       Console.WriteLine("Testing finished.");
       Console.ReadLine();
     }
 
-    static void USGSTest()
+    static void NASATest()
     {
-      Console.WriteLine("Start USGSTest.");
+      Console.WriteLine("Start NASATest.");
 
-      // https://dds.cr.usgs.gov/srtm/version2_1/SRTM3/
+      //https://dds.cr.usgs.gov/srtm/version2_1/SRTM3/
       //var srtmData = new SRTMData(@"srtm-cache", new USGSSource());
 
+      //put username.dat & password.dat in executable directory using plain text (no encryption yet)
       var credentials = new NetworkCredential(SettingReader.ReadSettingFile("username.dat"), SettingReader.ReadSettingFile("password.dat"), @"https://urs.earthdata.nasa.gov");
       var srtmData = new SRTMData(@"srtm-cache", new NASASource(credentials));
 
@@ -60,20 +61,20 @@ namespace SRTM.Tests.Functional
       int? elevationLaPaz = srtmData.GetElevation(-16.5, -68.15);
       Console.WriteLine("Elevation of La Paz: {0}m", elevationLaPaz);
 
-      //int? elevationKathmandu = srtmData.GetElevation(27.702983735525862f, 85.2978515625f);
-      //Console.WriteLine("Elevation of Kathmandu {0}m", elevationKathmandu);
+      int? elevationKathmandu = srtmData.GetElevation(27.702983735525862f, 85.2978515625f);
+      Console.WriteLine("Elevation of Kathmandu {0}m", elevationKathmandu);
 
-      //int? elevationHanoi = srtmData.GetElevation(21.030673628606102f, 105.853271484375f);
-      //Console.WriteLine("Elevation of Ha Noi {0}m", elevationHanoi);
+      int? elevationHanoi = srtmData.GetElevation(21.030673628606102f, 105.853271484375f);
+      Console.WriteLine("Elevation of Ha Noi {0}m", elevationHanoi);
 
       // tries to get elevation from an empty cell.
       int? elevationSomeplace1 = srtmData.GetElevation(52.02237f, 2.55853224f);
       Console.WriteLine("Elevation of nowhere returns {0}", elevationSomeplace1);
 
-      //int? elevationNamibia1 = srtmData.GetElevation(-20, 19.89597);
-      //Console.WriteLine("Elevation of namibia1 returns {0}", elevationNamibia1);
+      int? elevationNamibia1 = srtmData.GetElevation(-20, 19.89597);
+      Console.WriteLine("Elevation of namibia1 returns {0}", elevationNamibia1);
 
-      Console.WriteLine("End USGSTest.");
+      Console.WriteLine("End NASATest.");
     }
 
     static void BilinearInterpolationTest()
