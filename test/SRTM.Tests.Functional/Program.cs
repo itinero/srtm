@@ -49,6 +49,9 @@ namespace SRTM.Tests.Functional
             // https://dds.cr.usgs.gov/srtm/version2_1/SRTM3/
             var srtmData = new SRTMData(@"srtm-cache", new USGSSource());
 
+            int? elevationVenice = srtmData.GetElevation(45.677950037643313, 13.386539993807673);
+            Console.WriteLine("Elevation of Venice: {0}m", elevationVenice);
+
             int? elevationInnsbruck = srtmData.GetElevation(47.267222, 11.392778);
             Console.WriteLine("Elevation of Innsbruck: {0}m", elevationInnsbruck);
 

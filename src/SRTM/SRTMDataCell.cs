@@ -228,7 +228,7 @@ namespace SRTM
                 return null;
 
             // Motorola "big-endian" order with the most significant byte first
-            return (HgtData[bytesPos]) << 8 | HgtData[bytesPos + 1];
+            return (short)((HgtData[bytesPos]) << 8 | HgtData[bytesPos + 1]);
         }
 
         private double Lerp(double start, double end, double delta)
